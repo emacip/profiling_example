@@ -11,17 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150221204240) do
+ActiveRecord::Schema.define(version: 20150221210245) do
 
-  create_table "social_accounts", force: true do |t|
-    t.integer  "user_id"
-    t.string   "social_id"
-    t.string   "social_name"
+  create_table "social_account_types", force: true do |t|
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "social_accounts", ["user_id"], name: "index_social_accounts_on_user_id"
+  create_table "social_accounts", force: true do |t|
+    t.string   "social_id"
+    t.string   "social_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "social_account_type_id"
+  end
 
   create_table "user_social_accounts", force: true do |t|
     t.integer  "user_id"
