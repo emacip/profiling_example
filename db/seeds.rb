@@ -22,16 +22,30 @@ LAST_NAMES = [ "Boyle", "Smith", "Dunne", "Kenny", "O'Connell", "Murphy", "Taylo
     age: rand(18..50)
   )
   # create social account(s)
-  u.social_accounts.create(
-    social_id: SecureRandom.uuid,
-    social_name: "#{name[0]}-#{u.id}",
-    social_account_type: user_sat.pop
-  )
-  if rand(10) % 2
-    u.social_accounts.create(
-      social_id: SecureRandom.uuid,
-      social_name: "#{name[0]}-#{u.id}",
-      social_account_type: user_sat.pop
+  sa1 = u.social_accounts.create(
+          social_id: SecureRandom.uuid,
+          social_name: "#{name[0]}-#{u.id}",
+          social_account_type: user_sat.pop
+        )
+  rand(10..150).times do |j|
+    type = SocialAction::TYPES.sample,
+    sa1.social_actions.create(
+      action_type: type,
+      value: "Some #{type}"
     )
+  end
+  if rand(10) % 2
+    sa2 = u.social_accounts.create(
+            social_id: SecureRandom.uuid,
+            social_name: "#{name[0]}-#{u.id}",
+            social_account_type: user_sat.pop
+          )
+    rand(10..150).times do |j|
+      type = SocialAction::TYPES.sample,
+      sa2.social_actions.create(
+        action_type: type,
+        value: "Some #{type}"
+      )
+    end
   end
 end

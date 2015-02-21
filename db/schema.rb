@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150221210245) do
+ActiveRecord::Schema.define(version: 20150221211708) do
 
   create_table "social_account_types", force: true do |t|
     t.string   "name"
@@ -26,6 +26,16 @@ ActiveRecord::Schema.define(version: 20150221210245) do
     t.datetime "updated_at"
     t.integer  "social_account_type_id"
   end
+
+  create_table "social_actions", force: true do |t|
+    t.string   "action_type"
+    t.string   "value"
+    t.integer  "social_account_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "social_actions", ["social_account_id"], name: "index_social_actions_on_social_account_id"
 
   create_table "user_social_accounts", force: true do |t|
     t.integer  "user_id"
