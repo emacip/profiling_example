@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
   resources :social_accounts
 
-  resources :users
+  resources :users do
+    get :benchmark, on: :collection
+    get :slow, on: :collection
+    get :improved, on: :collection
+    get :quick, on: :collection
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

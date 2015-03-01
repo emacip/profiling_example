@@ -1,5 +1,38 @@
+require 'benchmark'
+
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+
+  # Custom actions
+  def benchmark
+    Benchmark.bm do |x|
+      x.report("UserJoinSocialAccounts: ") do
+        User.joins(:social_accounts).all
+      end
+    end
+  end
+
+  def slow
+    @data = {}
+    User.all.each do |user|
+      user_data = {
+        accounts: [],
+        name: user.name, email: user.email
+      }
+      user.social_accounts.each do |sa|
+        user_data[:accounts] << {type: sa.social_account_type.name, name: sa.social_name}
+      end
+      @data[user.id] = user_data
+    end
+  end
+
+  def improved
+  end
+
+  def quick
+  end
+
+  ###### Generated actions #######
 
   # GET /users
   # GET /users.json
