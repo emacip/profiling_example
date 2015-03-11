@@ -1,0 +1,6 @@
+events: wall_time
+
+fl=/Users/matemarjai/Work/profiling_example/app/controllers/users_controller.rb
+fn=UsersController#quick
+58 50
+

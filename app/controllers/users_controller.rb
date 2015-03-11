@@ -1,4 +1,5 @@
 require 'benchmark'
+require 'ruby-prof'
 
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
@@ -13,6 +14,9 @@ class UsersController < ApplicationController
   end
 
   def slow
+    # Start the profiler
+    RubyProf.start
+
     @data = {}
     User.all.each do |user|
       user_data = {
@@ -24,12 +28,41 @@ class UsersController < ApplicationController
       end
       @data[user.id] = user_data
     end
+
+    # Stop the profiler
+    result = RubyProf.stop
+
+    # Write the results
+    printer = RubyProf::MultiPrinter.new(result)
+    printer.print(:path => "./public/slow", :profile => "profile")
   end
 
   def improved
+    # Start the profiler
+    RubyProf.start
+
+    @data = {}
+
+    # Stop the profiler
+    result = RubyProf.stop
+
+    # Write the results
+    printer = RubyProf::MultiPrinter.new(result)
+    printer.print(:path => "./public/slow", :profile => "profile")
   end
 
   def quick
+    # Start the profiler
+    RubyProf.start
+
+    @data = {}
+
+    # Stop the profiler
+    result = RubyProf.stop
+
+    # Write the results
+    printer = RubyProf::MultiPrinter.new(result)
+    printer.print(:path => "./public/slow", :profile => "profile")
   end
 
   ###### Generated actions #######
