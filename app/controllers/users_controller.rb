@@ -42,13 +42,23 @@ class UsersController < ApplicationController
     RubyProf.start
 
     @data = {}
+    User.includes(social_accounts: [:social_account_type]).each do |user|
+      user_data = {
+        accounts: [],
+        name: user.name, email: user.email
+      }
+      user.social_accounts.each do |sa|
+        user_data[:accounts] << {type: sa.social_account_type.name, name: sa.social_name}
+      end
+      @data[user.id] = user_data
+    end
 
     # Stop the profiler
     result = RubyProf.stop
 
     # Write the results
     printer = RubyProf::MultiPrinter.new(result)
-    printer.print(:path => "./public/slow", :profile => "profile")
+    printer.print(:path => "./public/improved", :profile => "profile")
   end
 
   def quick
@@ -56,13 +66,23 @@ class UsersController < ApplicationController
     RubyProf.start
 
     @data = {}
+    @data.default = {}
+    User
+      .select("users.email, users.name, social_accounts.social_name, social_account_types.name as sa_name")
+      .joins(social_accounts: [:social_account_type])
+      .map do |user|
+        @data[user.id][:name] = user.name
+        @data[user.id][:email] = user.email
+        @data[user.id][:accounts] ||= []
+        @data[user.id][:accounts] << {type: user.sa_name, name: user.social_name}
+      end
 
     # Stop the profiler
     result = RubyProf.stop
 
     # Write the results
     printer = RubyProf::MultiPrinter.new(result)
-    printer.print(:path => "./public/slow", :profile => "profile")
+    printer.print(:path => "./public/quick", :profile => "profile")
   end
 
   ###### Generated actions #######
