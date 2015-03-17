@@ -70,7 +70,7 @@ class UsersController < ApplicationController
     User
       .select("users.email, users.name, social_accounts.social_name, social_account_types.name as sa_name")
       .joins(social_accounts: [:social_account_type])
-      .map do |user|
+      .each do |user|
         @data[user.id][:name] = user.name
         @data[user.id][:email] = user.email
         @data[user.id][:accounts] ||= []
